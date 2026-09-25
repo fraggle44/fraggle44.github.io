@@ -41,7 +41,7 @@ npm run build
 npm run check
 ```
 
-`npm run build` writes `_site/`. `npm run check` confirms the seven seeded keeps, refuses known non-keeps, and checks that the built pages need no client script.
+`npm run build` writes `_site/`. `npm run check` confirms the sixteen seeded keeps, refuses known non-keeps, and checks that the built pages need no client script.
 
 ## Deploy
 

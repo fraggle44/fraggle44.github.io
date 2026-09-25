@@ -1,6 +1,9 @@
 # Confirmed keeps only (from morning-brief "done Sep N keep" chain).
 # DO NOT include: MapCrunch (Sep 18 skip), Neal.fun (Sep 20 skip),
-# NASA Image Library (Sep 25 queued only — not reviewed).
+# Window Swap, CAC, Monastery Icons,
+# NASA Image Library (Sep 25 queued only — not reviewed),
+# or August soft-keeps (Zoom Earth, Flightradar24, MarineTraffic, Windy,
+# LightningMaps, Submarine Cable Map, Global Forest Watch).
 categories:
   - maps-place
   - spiritual
@@ -11,6 +14,69 @@ categories:
   - other
 
 links:
+  - id: true-size
+    title: The True Size
+    url: https://thetruesize.com/
+    kept_on: 2026-09-02
+    category: maps-place
+    blurb: Compare real country sizes — a map projection wonder.
+    status: live
+  - id: old-maps-online
+    title: Old Maps Online
+    url: https://www.oldmapsonline.org/
+    kept_on: 2026-09-02
+    category: maps-place
+    blurb: Historical maps.
+    status: live
+  - id: david-rumsey
+    title: David Rumsey Map Collection
+    url: https://www.davidrumsey.com/
+    kept_on: 2026-09-03
+    category: maps-place
+    blurb: 150k historic maps.
+    status: live
+  - id: openstreetmap
+    title: OpenStreetMap
+    url: https://www.openstreetmap.org/
+    kept_on: 2026-09-05
+    category: maps-place
+    blurb: Volunteer-drawn world map.
+    status: live
+  - id: sacred-texts
+    title: Internet Sacred Text Archive
+    url: https://www.sacred-texts.com/
+    kept_on: 2026-09-07
+    category: spiritual
+    blurb: Public-domain sacred texts across traditions.
+    status: live
+  - id: bible-gateway
+    title: Bible Gateway
+    url: https://www.biblegateway.com/
+    kept_on: 2026-09-08
+    category: spiritual
+    blurb: Scripture search and reading plans.
+    status: live
+  - id: hallow
+    title: Hallow
+    url: https://www.hallow.com/
+    kept_on: 2026-09-09
+    category: spiritual
+    blurb: Catholic prayer and meditation.
+    status: live
+  - id: ignatian-spirituality
+    title: Ignatian Spirituality
+    url: https://www.ignatianspirituality.com/
+    kept_on: 2026-09-12
+    category: spiritual
+    blurb: Jesuit examen, retreats, and prayer resources.
+    status: live
+  - id: lectio-365
+    title: Lectio 365
+    url: https://www.lectio365.com/
+    kept_on: 2026-09-14
+    category: spiritual
+    blurb: Daily lectio divina from 24-7 Prayer.
+    status: live
   - id: plough
     title: Plough
     url: https://www.plough.com/

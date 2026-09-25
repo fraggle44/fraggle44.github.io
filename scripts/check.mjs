@@ -14,6 +14,15 @@ const EXPECTED_CATEGORIES = [
 ];
 
 const EXPECTED_LINKS = [
+  ["true-size", "The True Size", "https://thetruesize.com/", "2026-09-02", "maps-place", "Compare real country sizes — a map projection wonder."],
+  ["old-maps-online", "Old Maps Online", "https://www.oldmapsonline.org/", "2026-09-02", "maps-place", "Historical maps."],
+  ["david-rumsey", "David Rumsey Map Collection", "https://www.davidrumsey.com/", "2026-09-03", "maps-place", "150k historic maps."],
+  ["openstreetmap", "OpenStreetMap", "https://www.openstreetmap.org/", "2026-09-05", "maps-place", "Volunteer-drawn world map."],
+  ["sacred-texts", "Internet Sacred Text Archive", "https://www.sacred-texts.com/", "2026-09-07", "spiritual", "Public-domain sacred texts across traditions."],
+  ["bible-gateway", "Bible Gateway", "https://www.biblegateway.com/", "2026-09-08", "spiritual", "Scripture search and reading plans."],
+  ["hallow", "Hallow", "https://www.hallow.com/", "2026-09-09", "spiritual", "Catholic prayer and meditation."],
+  ["ignatian-spirituality", "Ignatian Spirituality", "https://www.ignatianspirituality.com/", "2026-09-12", "spiritual", "Jesuit examen, retreats, and prayer resources."],
+  ["lectio-365", "Lectio 365", "https://www.lectio365.com/", "2026-09-14", "spiritual", "Daily lectio divina from 24-7 Prayer."],
   ["plough", "Plough", "https://www.plough.com/", "2026-09-16", "spiritual", "Faith, justice, and communal Christian essays."],
   ["virtual-vacation", "Virtual Vacation", "https://virtualvacation.us/", "2026-09-17", "travel-transit", "Virtual city walks — wander without leaving home."],
   ["atlas-obscura", "Atlas Obscura", "https://www.atlasobscura.com/", "2026-09-19", "maps-place", "Weird and wonderful places catalog."],
@@ -23,7 +32,27 @@ const EXPECTED_LINKS = [
   ["apod", "APOD", "https://apod.nasa.gov/", "2026-09-24", "weather-sky", "NASA astronomy picture of the day."],
 ];
 
-const FORBIDDEN = ["mapcrunch", "neal.fun", "nasa image library", "images.nasa.gov"];
+const FORBIDDEN = [
+  "mapcrunch",
+  "neal.fun",
+  "nasa image library",
+  "images.nasa.gov",
+  "window-swap.com",
+  "window swap",
+  "cac.org",
+  "monastery icons",
+  "monasteryicons.com",
+  "zoom.earth",
+  "zoom earth",
+  "flightradar24",
+  "marinetraffic",
+  "windy.com",
+  "lightningmaps.org",
+  "submarinecablemap.com",
+  "submarine cable map",
+  "globalforestwatch.org",
+  "global forest watch",
+];
 
 function readYaml(file) {
   return load(readFileSync(file, "utf8"), { schema: CORE_SCHEMA });
@@ -44,7 +73,7 @@ const categories = readYaml("data/categories.yml");
 
 assert.deepEqual(raw.categories, EXPECTED_CATEGORIES, "links.yml category ids drifted from the seed");
 assert.deepEqual(categories.map((category) => category.id), EXPECTED_CATEGORIES, "categories.yml order drifted");
-assert.equal(raw.links.length, 7, "seed must contain exactly seven keeps");
+assert.equal(raw.links.length, EXPECTED_LINKS.length, `seed must contain exactly ${EXPECTED_LINKS.length} keeps`);
 
 const serialized = JSON.stringify(raw).toLowerCase();
 for (const needle of FORBIDDEN) {
@@ -79,16 +108,18 @@ for (const file of htmlFiles) {
 }
 
 const home = readFileSync(path.join(siteRoot, "index.html"), "utf8");
+const newestFirst = [...raw.links].sort((a, b) => String(b.kept_on).localeCompare(String(a.kept_on)));
 let cursor = -1;
-for (const link of [...EXPECTED_LINKS].reverse()) {
-  const at = home.indexOf(link[1]);
-  assert.ok(at > cursor, `home is not newest-first around ${link[1]}`);
+for (const link of newestFirst) {
+  const at = home.indexOf(link.title);
+  assert.ok(at > cursor, `home is not newest-first around ${link.title}`);
   cursor = at;
-  assert.ok(home.includes(link[5]), `home missing blurb for ${link[1]}`);
+  assert.ok(home.includes(link.blurb), `home missing blurb for ${link.title}`);
 }
 assert.ok(home.includes("Recent keeps"));
-assert.ok(home.includes("7 on the shelf"));
+assert.ok(home.includes(`${raw.links.length} on the shelf`));
 assert.ok(home.includes(">Kept 24 Sep 2026<") || home.includes("Kept 24 Sep 2026"));
+assert.ok(home.includes(">Kept 2 Sep 2026<") || home.includes("Kept 2 Sep 2026"));
 
 for (const id of EXPECTED_CATEGORIES) {
   const page = path.join(siteRoot, id, "index.html");
@@ -121,9 +152,22 @@ const spiritual = readFileSync(path.join(siteRoot, "spiritual/index.html"), "utf
 assert.ok(spiritual.includes("https://www.plough.com/"));
 assert.ok(spiritual.includes("www.plough.com"));
 assert.ok(spiritual.includes('datetime="2026-09-16"'));
+assert.ok(spiritual.includes("Internet Sacred Text Archive"));
+assert.ok(spiritual.includes("Bible Gateway"));
+assert.ok(spiritual.includes("Hallow"));
+assert.ok(spiritual.includes("Ignatian Spirituality"));
+assert.ok(spiritual.includes("Lectio 365"));
+
+const maps = readFileSync(path.join(siteRoot, "maps-place/index.html"), "utf8");
+assert.ok(maps.includes("The True Size"));
+assert.ok(maps.includes("Old Maps Online"));
+assert.ok(maps.includes("David Rumsey Map Collection"));
+assert.ok(maps.includes("OpenStreetMap"));
+assert.ok(maps.includes("Atlas Obscura"));
+assert.ok(maps.includes('datetime="2026-09-02"'));
 
 assert.equal(existsSync(path.join(siteRoot, "assets/site.css")), true);
 assert.equal(existsSync(path.join(siteRoot, "favicon.svg")), true);
 assert.equal(existsSync(path.join(siteRoot, "404.html")), true);
 
-console.log(`check ok: 7 keeps, ${EXPECTED_CATEGORIES.length} categories, ${htmlFiles.length} html files, no client script`);
+console.log(`check ok: ${raw.links.length} keeps, ${EXPECTED_CATEGORIES.length} categories, ${htmlFiles.length} html files, no client script`);
