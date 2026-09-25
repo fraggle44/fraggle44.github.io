@@ -1,0 +1,5 @@
+<nav class="chips" aria-label="Categories">
+  {% for cat in cabinet.categories %}
+  <a class="chip" href="/{{ cat.id }}/"{% if category and category.id == cat.id %} aria-current="page"{% endif %}>{{ cat.title }}</a>
+  {% endfor %}
+</nav>

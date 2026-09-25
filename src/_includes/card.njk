@@ -1,0 +1,9 @@
+<article class="card">
+  <div class="card-top">
+    <a class="ticket" href="/{{ link.category }}/">{{ link.categoryTitle }}</a>
+    <time datetime="{{ link.kept_on }}">Kept {{ link.kept_on | dateLabel }}</time>
+  </div>
+  <h2 class="card-title"><a href="{{ link.url }}">{{ link.title }}</a></h2>
+  <p class="blurb">{{ link.blurb }}</p>
+  <p class="url"><a href="{{ link.url }}">{{ link.url | hostPath }}</a></p>
+</article>

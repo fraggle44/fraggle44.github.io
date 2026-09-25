@@ -1,0 +1,23 @@
+---
+layout: layouts/base.njk
+permalink: /
+description: A public shelf of excellent keeps. Agreed, then placed.
+---
+<section class="intro">
+  <p class="lede">A public shelf of sites worth returning to. Each card is a keep: agreed, then placed. Candidates pass through the week; only keeps stay.</p>
+  <div class="ornament" aria-hidden="true"><span></span></div>
+</section>
+
+{% include "chips.njk" %}
+
+<section class="recent" aria-labelledby="recent-heading">
+  <div class="section-head">
+    <h1 id="recent-heading">Recent keeps</h1>
+    <p class="count">{{ cabinet.links | length }} on the shelf · newest first</p>
+  </div>
+  <div class="cards">
+    {% for link in cabinet.links %}
+      {% include "card.njk" %}
+    {% endfor %}
+  </div>
+</section>

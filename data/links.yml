@@ -1,0 +1,62 @@
+# Confirmed keeps only (from morning-brief "done Sep N keep" chain).
+# DO NOT include: MapCrunch (Sep 18 skip), Neal.fun (Sep 20 skip),
+# NASA Image Library (Sep 25 queued only — not reviewed).
+categories:
+  - maps-place
+  - spiritual
+  - science-wonder
+  - tools
+  - weather-sky
+  - travel-transit
+  - other
+
+links:
+  - id: plough
+    title: Plough
+    url: https://www.plough.com/
+    kept_on: 2026-09-16
+    category: spiritual
+    blurb: Faith, justice, and communal Christian essays.
+    status: live
+  - id: virtual-vacation
+    title: Virtual Vacation
+    url: https://virtualvacation.us/
+    kept_on: 2026-09-17
+    category: travel-transit
+    blurb: Virtual city walks — wander without leaving home.
+    status: live
+  - id: atlas-obscura
+    title: Atlas Obscura
+    url: https://www.atlasobscura.com/
+    kept_on: 2026-09-19
+    category: maps-place
+    blurb: Weird and wonderful places catalog.
+    status: live
+  - id: scale-universe-2
+    title: The Scale of the Universe 2
+    url: https://htwins.net/scale2/
+    kept_on: 2026-09-21
+    category: science-wonder
+    blurb: Atom-to-universe interactive scale.
+    status: live
+  - id: nasa-eyes
+    title: NASA Eyes
+    url: https://eyes.nasa.gov/
+    kept_on: 2026-09-22
+    category: weather-sky
+    blurb: 3D solar system and spacecraft views.
+    status: live
+  - id: stellarium-web
+    title: Stellarium Web
+    url: https://stellarium-web.org/
+    kept_on: 2026-09-23
+    category: weather-sky
+    blurb: Browser sky map — stars where you are.
+    status: live
+  - id: apod
+    title: APOD
+    url: https://apod.nasa.gov/
+    kept_on: 2026-09-24
+    category: weather-sky
+    blurb: NASA astronomy picture of the day.
+    status: live

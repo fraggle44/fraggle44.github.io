@@ -1,0 +1,23 @@
+# Browse order and labels for the category ids in data/links.yml.
+# A category with no keeps still gets a page, so the shelf can be browsed before it is filled.
+- id: maps-place
+  title: Maps & place
+  blurb: Places, atlases, and the odd corner of a map.
+- id: spiritual
+  title: Spiritual
+  blurb: Contemplative reading — faith, justice, and the examined life.
+- id: science-wonder
+  title: Science & wonder
+  blurb: Scale, mechanism, and the feeling of looking further.
+- id: tools
+  title: Tools
+  blurb: Instruments that earn a permanent place on the desk.
+- id: weather-sky
+  title: Weather & sky
+  blurb: Sky, weather, and what is overhead.
+- id: travel-transit
+  title: Travel & transit
+  blurb: Getting somewhere, or wandering as if you had.
+- id: other
+  title: Other
+  blurb: Keeps that do not sit neatly in one drawer.

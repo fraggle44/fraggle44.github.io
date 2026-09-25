@@ -1,0 +1,25 @@
+---
+layout: layouts/base.njk
+pagination:
+  data: cabinet.categories
+  size: 1
+  alias: category
+permalink: "/{{ category.id }}/"
+---
+<section class="category" aria-labelledby="category-heading">
+  <div class="section-head">
+    <h1 id="category-heading">{{ category.title }}</h1>
+    <p class="count">{% if category.links | length %}{{ category.links | length }} {% if category.links | length == 1 %}keep{% else %}keeps{% endif %}{% else %}Empty drawer{% endif %}</p>
+  </div>
+  <p class="lede">{{ category.blurb }}</p>
+  {% include "chips.njk" %}
+  {% if category.links | length %}
+  <div class="cards">
+    {% for link in category.links %}
+      {% include "card.njk" %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty">This drawer is empty. A keep appears here only after it is agreed.</p>
+  {% endif %}
+</section>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#f4efe6">
+  {% set pageTitle = title if title else (category.title if category else "") %}
+  {% set pageDescription = description if description else (category.blurb if category else site.description) %}
+  <title>{% if pageTitle %}{{ pageTitle }} — {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <meta name="description" content="{{ pageDescription }}">
+  <link rel="canonical" href="{{ site.url }}{{ page.url }}">
+  <meta property="og:title" content="{% if pageTitle %}{{ pageTitle }} — {{ site.title }}{% else %}{{ site.title }}{% endif %}">
+  <meta property="og:description" content="{{ pageDescription }}">
+  <meta property="og:url" content="{{ site.url }}{{ page.url }}">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/assets/site.css">
+</head>
+<body>
+  <a class="skip" href="#content">Skip to content</a>
+  <header class="mast">
+    <div class="wrap">
+      <p class="kicker"><span class="seal" aria-hidden="true"></span> A cabinet of keeps</p>
+      <p class="wordmark"><a href="/">The Excellent <span>Internet</span></a></p>
+      <nav class="nav" aria-label="Site">
+        <a href="/" {% if page.url == "/" %}aria-current="page"{% endif %}>Shelf</a>
+        <a href="/about/" {% if page.url == "/about/" %}aria-current="page"{% endif %}>About</a>
+      </nav>
+    </div>
+  </header>
+  <main id="content">
+    <div class="wrap">
+      {{ content | safe }}
+    </div>
+  </main>
+  <footer class="colophon">
+    <div class="wrap">
+      <p>Keeps only. Weekly, when something is worth keeping.</p>
+    </div>
+  </footer>
+</body>
+</html>
