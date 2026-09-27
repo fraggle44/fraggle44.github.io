@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#f5f0e8">
+<title>Barista Express Impress — Care</title>
+<style>
+  :root {
+    --bg: #f5f0e8;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #4a4a4a;
+    --border: #d4ccc0;
+    --accent: #3d2914;
+    --accent-soft: #e8dfd2;
+    --ok: #1b5e3a;
+    --ok-bg: #e6f4ec;
+    --warn: #8a4b00;
+    --warn-bg: #fff3e0;
+    --danger: #8b1a1a;
+    --tap: 52px;
+    --radius: 14px;
+    --shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  * { box-sizing: border-box; }
+  html { font-size: 18px; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.45;
+    padding: 16px 16px 96px;
+    max-width: 640px;
+    margin-inline: auto;
+  }
+  h1 {
+    font-size: 1.55rem;
+    margin: 0 0 4px;
+    letter-spacing: -0.02em;
+  }
+  .sub {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0 0 20px;
+  }
+  nav.tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 18px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    padding: 8px 0 12px;
+  }
+  nav.tabs button {
+    min-height: var(--tap);
+    border: 2px solid var(--border);
+    background: var(--card);
+    color: var(--text);
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    padding: 8px 4px;
+    cursor: pointer;
+  }
+  nav.tabs button.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  section.panel { display: none; }
+  section.panel.active { display: block; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+  }
+  .card h2 {
+    font-size: 1.2rem;
+    margin: 0 0 8px;
+  }
+  .note, .warn, .remind {
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin: 10px 0 14px;
+    font-size: 0.95rem;
+  }
+  .note { background: var(--accent-soft); color: var(--text); }
+  .warn { background: var(--warn-bg); color: var(--warn); font-weight: 600; }
+  .remind {
+    background: var(--ok-bg);
+    color: var(--ok);
+    font-weight: 600;
+  }
+  .remind.due { background: var(--warn-bg); color: var(--warn); }
+  .remind.overdue { background: #fde8e8; color: var(--danger); }
+  ol.checklist {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  ol.checklist li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    min-height: var(--tap);
+    padding: 12px 10px;
+    margin: 0 0 8px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: #faf8f5;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+  }
+  ol.checklist li.done {
+    background: var(--ok-bg);
+    border-color: #9dcfb0;
+  }
+  ol.checklist li .box {
+    flex: 0 0 32px;
+    width: 32px;
+    height: 32px;
+    margin-top: 2px;
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    font-size: 1.1rem;
+    color: var(--ok);
+    background: #fff;
+  }
+  ol.checklist li.done .box { background: var(--ok); color: #fff; border-color: var(--ok); }
+  ol.checklist li .txt { flex: 1; font-size: 1rem; }
+  ol.checklist li .num {
+    font-weight: 700;
+    color: var(--accent);
+    margin-right: 4px;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  button.btn, .actions button {
+    min-height: var(--tap);
+    padding: 12px 18px;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    border: 2px solid var(--accent);
+    background: var(--accent);
+    color: #fff;
+    cursor: pointer;
+  }
+  button.btn.secondary, .actions button.secondary {
+    background: var(--card);
+    color: var(--accent);
+  }
+  button.btn.danger {
+    background: #fff;
+    color: var(--danger);
+    border-color: var(--danger);
+  }
+  label.field {
+    display: block;
+    font-weight: 600;
+    margin: 12px 0 6px;
+  }
+  input, select, textarea {
+    width: 100%;
+    min-height: var(--tap);
+    font-size: 1.05rem;
+    padding: 12px 14px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+    color: var(--text);
+    font-family: inherit;
+  }
+  textarea { min-height: 96px; resize: vertical; }
+  .history-item {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 10px;
+    background: #faf8f5;
+  }
+  .history-item header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .history-item .type { font-weight: 700; }
+  .history-item .date { color: var(--muted); font-size: 0.9rem; }
+  .history-item .notes { white-space: pre-wrap; margin: 6px 0 10px; }
+  .history-item button.del {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    border-radius: 10px;
+    border: 2px solid var(--danger);
+    background: #fff;
+    color: var(--danger);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .empty { color: var(--muted); padding: 12px 0; }
+  footer.fine {
+    margin-top: 24px;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+  <h1>Barista Express Impress</h1>
+  <p class="sub">Cleaning &amp; descaling care — phone-friendly checklist + log</p>
+
+  <div id="reminders"></div>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button type="button" class="active" data-tab="clean" aria-selected="true">Clean</button>
+    <button type="button" data-tab="descale" aria-selected="false">Descale</button>
+    <button type="button" data-tab="filter" aria-selected="false">Filter</button>
+    <button type="button" data-tab="log" aria-selected="false">Log</button>
+  </nav>
+
+  <section id="clean" class="panel active" role="tabpanel">
+    <div class="card">
+      <h2>Cleaning cycle</h2>
+      <p class="note">Back-flushing — separate from descaling. CLEAN / DESCALE light <strong>flashes</strong> when a cleaning cycle is required.</p>
+      <ol class="checklist" id="clean-list"></ol>
+      <div class="actions">
+        <button type="button" class="secondary" data-reset="clean-list">Reset checks</button>
+        <button type="button" data-log="Cleaning cycle">Log as done</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="descale" class="panel" role="tabpanel">
+    <div class="card">
+      <h2>Descaling</h2>
+      <p class="warn">Remove the water filter before adding descaling powder. Do not use bottled water when descaling.</p>
+      <p class="note">CLEAN / DESCALE light illuminates <strong>solid</strong> when descaling is required.</p>
+      <ol class="checklist" id="descale-list"></ol>
+      <div class="actions">
+        <button type="button" class="secondary" data-reset="descale-list">Reset checks</button>
+        <button type="button" data-log="Descaling">Log as done</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="filter" class="panel" role="tabpanel">
+    <div class="card">
+      <h2>Water filter</h2>
+      <p class="note">Replacing every three months reduces the need to descale. In hard water areas, change more frequently.</p>
+      <ol class="checklist" id="filter-list"></ol>
+      <div class="actions">
+        <button type="button" class="secondary" data-reset="filter-list">Reset checks</button>
+        <button type="button" data-log="Water filter">Log as done</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="log" class="panel" role="tabpanel">
+    <div class="card">
+      <h2>Add log entry</h2>
+      <label class="field" for="log-date">Date</label>
+      <input type="date" id="log-date">
+      <label class="field" for="log-type">Process</label>
+      <select id="log-type">
+        <option>Cleaning cycle</option>
+        <option>Descaling</option>
+        <option>Water filter</option>
+      </select>
+      <label class="field" for="log-notes">Notes</label>
+      <textarea id="log-notes" placeholder="Optional notes"></textarea>
+      <div class="actions">
+        <button type="button" id="log-add">Save entry</button>
+      </div>
+    </div>
+    <div class="card">
+      <h2>History</h2>
+      <p class="sub" style="margin:0 0 12px">Newest first. Stored only on this phone/browser (localStorage).</p>
+      <div id="history"></div>
+    </div>
+  </section>
+
+  <footer class="fine">Steps taken from the Barista Express Impress instruction book (Care &amp; Cleaning). Not affiliated with Breville.</footer>
+
+<script>
+(function () {
+  var STORAGE_KEY = "bei-care-log-v1";
+  var CHECK_KEY = "bei-care-checks-v1";
+
+  var CLEAN_STEPS = [
+    "Insert the 1 CUP filter basket into the portafilter, followed by the supplied cleaning disc, followed by one cleaning tablet.",
+    "Lock the portafilter into the group head and place a large container beneath the portafilter spouts.",
+    "Ensure the water tank is filled with cold water and the drip tray is empty.",
+    "Press the POWER button to switch the machine off.",
+    "Press and hold 1 CUP, 2 CUP and the POWER buttons for 3 seconds.",
+    "The cleaning cycle will commence and last for approximately 5 minutes. Water will intermittently flush into the portafilter to dissolve the cleaning tablet and flush back into the group head. NOTE: No water should come through the portafilter.",
+    "Remove the portafilter and ensure the tablet has completely dissolved. If not dissolved, repeat from step 4 until the tablet is dissolved.",
+    "Once dissolved, remove the cleaning disc, reinsert the portafilter and press the 2 CUP button to rinse the brew head. Place a container under the spout; wipe any splashes with a soft dry cloth."
+  ];
+
+  var DESCALE_STEPS = [
+    "Fully dissolve one sachet of Breville descaling powder into 4 cups (34 fl oz | 1 L) of water, then fill the water tank (start only after powder is fully dissolved). Filter must already be removed.",
+    "Ensure the machine is OFF; press and hold 2 CUP and POWER simultaneously for 5 seconds to enter descale mode. During heating, POWER and 2 CUP flash. Ready when POWER, 2 CUP, CLEAN / DESCALE, and HOT WATER / STEAM are all solid.",
+    "Press the 2 CUP button to descale the coffee component (~25 seconds). Beep and solid 2 CUP light confirm. Press 2 CUP again within 25 seconds to terminate early.",
+    "Descale steam: turn steam dial RIGHT toward the STEAM icon (~13 seconds). Turn dial to STANDBY to stop early.",
+    "Descale hot water: turn steam dial LEFT toward the HOT WATER icon (~8 seconds). STANDBY to stop early.",
+    "About half (17 fl oz | 0.5 L) of descale solution should remain. Repeat steps 3–5 to empty the tank.",
+    "Descaling solution rinse: remove water tank, rinse thoroughly, refill with fresh cold water to max (68 fl oz | 2 L), then repeat steps 4–6 to clear residue.",
+    "Press POWER to quit descaling (LEDs switch off). NOTE: Auto-off after 5 minutes with no action in descale mode — resume from step 2."
+  ];
+
+  var FILTER_STEPS = [
+    "Remove the filter from the plastic bag and soak in a cup of water for 5 minutes.",
+    "Rinse the filter under cold running water for 5 seconds.",
+    "Insert the filter into the filter holder.",
+    "Set the date dial 3 months ahead.",
+    "Install: push down the filter to lock into place, then insert and lock the water tank. Replace every 3 months (more often in hard water)."
+  ];
+
+  function todayISO() {
+    var d = new Date();
+    var m = String(d.getMonth() + 1).padStart(2, "0");
+    var day = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-" + day;
+  }
+
+  function loadLog() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveLog(entries) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+  }
+
+  function loadChecks() {
+    try {
+      var raw = localStorage.getItem(CHECK_KEY);
+      return raw ? JSON.parse(raw) : {};
+    } catch (e) {
+      return {};
+    }
+  }
+
+  function saveChecks(state) {
+    localStorage.setItem(CHECK_KEY, JSON.stringify(state));
+  }
+
+  function renderList(listId, steps) {
+    var ol = document.getElementById(listId);
+    var checks = loadChecks();
+    var done = checks[listId] || [];
+    ol.innerHTML = "";
+    steps.forEach(function (text, i) {
+      var li = document.createElement("li");
+      if (done.indexOf(i) !== -1) li.className = "done";
+      li.setAttribute("role", "checkbox");
+      li.setAttribute("aria-checked", done.indexOf(i) !== -1 ? "true" : "false");
+      li.dataset.index = String(i);
+      li.innerHTML =
+        '<span class="box" aria-hidden="true">' +
+        (done.indexOf(i) !== -1 ? "✓" : "") +
+        "</span>" +
+        '<span class="txt"><span class="num">' +
+        (i + 1) +
+        ".</span> " +
+        text +
+        "</span>";
+      li.addEventListener("click", function () {
+        toggleCheck(listId, i);
+      });
+      ol.appendChild(li);
+    });
+  }
+
+  function toggleCheck(listId, index) {
+    var checks = loadChecks();
+    var done = checks[listId] ? checks[listId].slice() : [];
+    var pos = done.indexOf(index);
+    if (pos === -1) done.push(index);
+    else done.splice(pos, 1);
+    checks[listId] = done;
+    saveChecks(checks);
+    var map = {
+      "clean-list": CLEAN_STEPS,
+      "descale-list": DESCALE_STEPS,
+      "filter-list": FILTER_STEPS
+    };
+    renderList(listId, map[listId]);
+  }
+
+  function resetChecks(listId) {
+    var checks = loadChecks();
+    checks[listId] = [];
+    saveChecks(checks);
+    var map = {
+      "clean-list": CLEAN_STEPS,
+      "descale-list": DESCALE_STEPS,
+      "filter-list": FILTER_STEPS
+    };
+    renderList(listId, map[listId]);
+  }
+
+  function addEntry(type, date, notes) {
+    var entries = loadLog();
+    entries.push({
+      id: String(Date.now()) + "-" + Math.random().toString(36).slice(2, 7),
+      date: date || todayISO(),
+      type: type,
+      notes: notes || ""
+    });
+    saveLog(entries);
+    renderHistory();
+    renderReminders();
+  }
+
+  function deleteEntry(id) {
+    var entries = loadLog().filter(function (e) {
+      return e.id !== id;
+    });
+    saveLog(entries);
+    renderHistory();
+    renderReminders();
+  }
+
+  function latestOf(type) {
+    var entries = loadLog()
+      .filter(function (e) {
+        return e.type === type;
+      })
+      .sort(function (a, b) {
+        return a.date < b.date ? 1 : a.date > b.date ? -1 : 0;
+      });
+    return entries[0] || null;
+  }
+
+  function daysSince(iso) {
+    if (!iso) return null;
+    var then = new Date(iso + "T12:00:00");
+    var now = new Date();
+    now.setHours(12, 0, 0, 0);
+    return Math.floor((now - then) / 86400000);
+  }
+
+  function renderReminders() {
+    var box = document.getElementById("reminders");
+    var parts = [];
+
+    var filter = latestOf("Water filter");
+    var fd = daysSince(filter && filter.date);
+    if (!filter) {
+      parts.push(
+        '<div class="remind overdue">Water filter: no replacement logged yet. Guide says every 3 months (sooner in hard water).</div>'
+      );
+    } else if (fd >= 90) {
+      parts.push(
+        '<div class="remind overdue">Water filter: last logged ' +
+          filter.date +
+          " (" +
+          fd +
+          " days ago). Due for replacement (every 3 months).</div>"
+      );
+    } else if (fd >= 75) {
+      parts.push(
+        '<div class="remind due">Water filter: last logged ' +
+          filter.date +
+          " (" +
+          fd +
+          " days ago). Approaching 3-month mark.</div>"
+      );
+    } else {
+      parts.push(
+        '<div class="remind">Water filter: last logged ' +
+          filter.date +
+          " (" +
+          fd +
+          " days ago). Next ~ every 3 months.</div>"
+      );
+    }
+
+    var clean = latestOf("Cleaning cycle");
+    var cd = daysSince(clean && clean.date);
+    if (!clean) {
+      parts.push(
+        '<div class="remind due">Cleaning cycle: none logged. Run when CLEAN / DESCALE light flashes.</div>'
+      );
+    } else {
+      parts.push(
+        '<div class="remind">Cleaning cycle: last logged ' +
+          clean.date +
+          " (" +
+          cd +
+          " days ago). Flash of CLEAN / DESCALE means it’s time again.</div>"
+      );
+    }
+
+    var descale = latestOf("Descaling");
+    var dd = daysSince(descale && descale.date);
+    if (!descale) {
+      parts.push(
+        '<div class="remind due">Descaling: none logged. Run when CLEAN / DESCALE light is solid.</div>'
+      );
+    } else if (dd >= 90) {
+      parts.push(
+        '<div class="remind overdue">Descaling: last logged ' +
+          descale.date +
+          " (" +
+          dd +
+          " days ago). Check for solid CLEAN / DESCALE light.</div>"
+      );
+    } else {
+      parts.push(
+        '<div class="remind">Descaling: last logged ' +
+          descale.date +
+          " (" +
+          dd +
+          " days ago). Solid CLEAN / DESCALE light means required.</div>"
+      );
+    }
+
+    box.innerHTML = parts.join("");
+  }
+
+  function renderHistory() {
+    var root = document.getElementById("history");
+    var entries = loadLog().slice().sort(function (a, b) {
+      if (a.date !== b.date) return a.date < b.date ? 1 : -1;
+      return a.id < b.id ? 1 : -1;
+    });
+    if (!entries.length) {
+      root.innerHTML = '<p class="empty">No entries yet.</p>';
+      return;
+    }
+    root.innerHTML = entries
+      .map(function (e) {
+        return (
+          '<article class="history-item" data-id="' +
+          e.id +
+          '"><header><div><div class="type">' +
+          e.type +
+          '</div><div class="date">' +
+          e.date +
+          "</div></div>" +
+          '<button type="button" class="del" data-del="' +
+          e.id +
+          '">Delete</button></header>' +
+          (e.notes
+            ? '<div class="notes">' +
+              e.notes.replace(/</g, "&lt;") +
+              "</div>"
+            : "") +
+          "</article>"
+        );
+      })
+      .join("");
+  }
+
+  document.querySelectorAll("nav.tabs button").forEach(function (btn) {
+    btn.addEventListener("click", function () {
+      var tab = btn.getAttribute("data-tab");
+      document.querySelectorAll("nav.tabs button").forEach(function (b) {
+        b.classList.toggle("active", b === btn);
+        b.setAttribute("aria-selected", b === btn ? "true" : "false");
+      });
+      document.querySelectorAll("section.panel").forEach(function (p) {
+        p.classList.toggle("active", p.id === tab);
+      });
+    });
+  });
+
+  document.body.addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (t.matches("[data-reset]")) {
+      resetChecks(t.getAttribute("data-reset"));
+    }
+    if (t.matches("[data-log]")) {
+      var type = t.getAttribute("data-log");
+      document.getElementById("log-type").value = type;
+      document.getElementById("log-date").value = todayISO();
+      document.getElementById("log-notes").value = "";
+      document.querySelectorAll("nav.tabs button").forEach(function (b) {
+        var on = b.getAttribute("data-tab") === "log";
+        b.classList.toggle("active", on);
+        b.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      document.querySelectorAll("section.panel").forEach(function (p) {
+        p.classList.toggle("active", p.id === "log");
+      });
+      document.getElementById("log-notes").focus();
+    }
+    if (t.matches("[data-del]")) {
+      deleteEntry(t.getAttribute("data-del"));
+    }
+  });
+
+  document.getElementById("log-add").addEventListener("click", function () {
+    var date = document.getElementById("log-date").value || todayISO();
+    var type = document.getElementById("log-type").value;
+    var notes = document.getElementById("log-notes").value.trim();
+    addEntry(type, date, notes);
+    document.getElementById("log-notes").value = "";
+  });
+
+  document.getElementById("log-date").value = todayISO();
+  renderList("clean-list", CLEAN_STEPS);
+  renderList("descale-list", DESCALE_STEPS);
+  renderList("filter-list", FILTER_STEPS);
+  renderHistory();
+  renderReminders();
+})();
+</script>
+</body>
+</html>

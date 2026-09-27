@@ -77,6 +77,8 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/assets/site.css": "assets/site.css" });
   eleventyConfig.addPassthroughCopy({ "src/favicon.svg": "favicon.svg" });
   eleventyConfig.addPassthroughCopy(fontCopies);
+  // Standalone care app. Kept outside src/ so Eleventy does not run it through Nunjucks.
+  eleventyConfig.addPassthroughCopy({ "public/barista/index.html": "barista/index.html" });
   eleventyConfig.addWatchTarget("data");
 
   return {
