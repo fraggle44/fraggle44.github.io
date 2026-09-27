@@ -94,15 +94,25 @@ raw.links.forEach((link, index) => {
 const siteRoot = "_site";
 assert.equal(existsSync(path.join(siteRoot, "index.html")), true, "build _site before check");
 
+const baristaPage = path.join(siteRoot, "barista", "index.html");
+const baristaSource = "public/barista/index.html";
+assert.equal(existsSync(baristaPage), true, "barista care page was not published");
+assert.deepEqual(readFileSync(baristaPage), readFileSync(baristaSource), "barista care page must be copied unchanged");
+
+function isBaristaPage(file) {
+  return path.relative(siteRoot, file) === path.join("barista", "index.html");
+}
+
 const htmlFiles = walk(siteRoot).filter((file) => file.endsWith(".html"));
-const corpus = htmlFiles.map((file) => readFileSync(file, "utf8")).join("\n");
+const shelfFiles = htmlFiles.filter((file) => !isBaristaPage(file));
+const corpus = shelfFiles.map((file) => readFileSync(file, "utf8")).join("\n");
 const lowerCorpus = corpus.toLowerCase();
 
 for (const needle of FORBIDDEN) {
   assert.equal(lowerCorpus.includes(needle), false, `forbidden keep published: ${needle}`);
 }
 
-for (const file of htmlFiles) {
+for (const file of shelfFiles) {
   const html = readFileSync(file, "utf8");
   assert.equal(/<script\b/i.test(html), false, `${file} should browse without JavaScript`);
 }
@@ -170,4 +180,4 @@ assert.equal(existsSync(path.join(siteRoot, "assets/site.css")), true);
 assert.equal(existsSync(path.join(siteRoot, "favicon.svg")), true);
 assert.equal(existsSync(path.join(siteRoot, "404.html")), true);
 
-console.log(`check ok: ${raw.links.length} keeps, ${EXPECTED_CATEGORIES.length} categories, ${htmlFiles.length} html files, no client script`);
+console.log(`check ok: ${raw.links.length} keeps, ${EXPECTED_CATEGORIES.length} categories, ${shelfFiles.length} shelf pages without client script, barista care page copied`);
